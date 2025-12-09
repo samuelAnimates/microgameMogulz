@@ -1,27 +1,6 @@
-# Playlate
-[Playdate](https://play.date) + template = Playlate
+# Clique de Chic: Micro-game Mogulz
 
-Use this template to explore the [Playdate SDK](https://play.date/dev/) and get
-to building your game faster.
-
-
-## How to Use
-
-Use this project to get started, then add your code and/or remove the bits you don't need. You can either use this template:
-
-- directly on GitHub, or
-- by downloading the zip file for this repo.
-
-### On GitHub
-This repo is a GitHub Template. Click "Use this template" in the top right to
-create your own repository based off of the code here. See [Creating a Repository from a Template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
-for more information.
-
-### From ZIP File
-You can also download a zip of this repository and start there. Head on over to
-[the Releases] area of this repo and download the latest version. Or, if you're
-feeling brave, download the latest by clicking `Code > Download ZIP`.
-
+An open-source Playdate minigame collection based on a fictional line of fashion dolls from the 2000s.
 
 ## Features
 
@@ -53,11 +32,20 @@ goodies too:
 This also ships with a GitHub Action that runs [the `luacheck` code linter](https://github.com/lunarmodules/luacheck)
 on your code before merging to the `main` branch.
 
+## Credits
+
+Unless otherwise noted below, [Samuel R. Mendez](https://samuelanimates.com) made all code, images, text, and anyother assets associated with this project.
+
+Code:
+- Samuel used the Github repo "[Playlate](https://github.com/bedinotti/playlate)" by Vanessa Bedinotti to structure this project.
+
+
 ## License
 
-This is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for more
-details. Generally: anything you build with this is yours.
+This is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for more details. Generally: anything you build with this is yours.
 
 This template only works with the Playdate SDK. Make sure you follow the terms
 of the [Playdate SDK License](https://play.date/dev/sdk-license) when building
 your games.
+
+
