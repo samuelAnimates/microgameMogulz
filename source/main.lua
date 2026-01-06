@@ -1,44 +1,178 @@
+--[[ Section 1: Code Imports
+Here we 
+]]
+
 -- Common CoreLibs imports.
 import "CoreLibs/object"
 import "CoreLibs/graphics"
 import "CoreLibs/sprites"
 import "CoreLibs/timer"
 
--- Project imports
+-- Import scripts from the root directory
 import "button"
 import "crank"
 import "lifecycle"
 import "simulator"
 
--- Use common shorthands for playdate code
-local gfx <const> = playdate.graphics
+--[[ Section 2: Global states
+Here we
+]]
 
---- By convention, most games need to perform some initial setup when they're
---- initially launched. Perform that setup here.
----
---- Note: This will be called exactly once. If you're looking to do something
---- whenever the game is resumed from the background, see playdate.gameWillResume
---- in lifecycle.lua
+-- Define starting game state, which we check/update at each frame
+GameState = {
+    
+   -- Where the player currently is, declared at title screen at first
+   -- One of: "title", "collection", "cutscene", "practice", "pause"
+   cat_current = "collection",  
+    
+   -- Which collection the player is on (nil if not in a collection)
+   -- "01_music", "02_sports", "03_fashion", "04_toys", "05_retro", "06_tech"
+   cat_collection = "collection_05_retro",  
+    
+   -- Which microgame the player is playing
+   -- Numerical id (nil if not in a game)
+   num_microgameId = 070,
+
+   -- Which level in a collection or practice the player is on (nil if not in either)
+   num_level = 1,
+
+   -- Pause menu navigation
+   pauseMenu = {
+      -- Which pause screen the 
+      -- Either "root" or "accessibility"
+      cat_screen = "root",
+      highlighted = 1,   -- which option is highlighted (1, 2, 3, etc.)
+      -- What screen we came from (so pause knows where to return)
+      pausedFrom = nil,  -- "collection", "practice" 
+   }
+    
+}
+
+AccessibilitySettings = {
+    crankControls = true,
+    accelerometerControls = true,
+    slowMode = false
+}
+
+
+-- Load save
+local loadedData = playdate.datastore.read("myGameSave")
+if loadedData then
+    -- Use loadedData.playerX, loadedData.score, etc.
+else
+    -- Handle first-time load or missing save
+    print("Checked device storage!")
+end
+
+-- Lookup table for minigame collections
+local collections = {
+    collection_01_music = {
+        minigameCount = 16,
+        path = "collections/01_music"
+    },
+    collection_02_sports = {
+        minigameCount = 16,
+        path = "collections/02_sports"
+    },
+    collection_03_fashion = {
+        minigameCount = 16,
+        path = "collections/03_fashion"
+    },
+    collection_04_toy = {
+        minigameCount = 16,
+        path = "collections/04_toy"
+    },
+    collection_05_retro = {
+        minigameCount = 16,
+        path = "collections/05_retro"
+    },
+    collection_06_tech = {
+        minigameCount = 16,
+        path = "collections/06_tech"
+    }
+}
+
+
+-- Menu option indices for reference
+PauseMenuOptions = {
+    root = {
+        "Accessibility",
+        "Return to Title Screen",
+        "Give Up"
+    },
+    accessibility = {
+        "Crank Controls",
+        "Accelerometer Controls",
+        "Slow Game Speed",
+        "Back"
+    }
+}
+
 local function gameDidLaunch()
     print(playdate.metadata.name .. " launched!")
 
-    gfx.setBackgroundColor(gfx.kColorBlack)
+
+
+    playdate.graphics.setBackgroundColor(playdate.graphics.kColorBlack)
 end
 gameDidLaunch()
 
+updates = 0
+x = 40
+y = 40
+playdate.graphics.setBackgroundColor(playdate.graphics.kColorWhite)
+
+-- Num variable to track which frame in a microgame we're on.
+-- Set to 0 outside of a micrograme. Max value will ge 240
+num_currentFrame = 0
+
+
+
+function loadCollection(collectionNumber)
+    gameState.currentCollection = {
+        number = collectionNumber,
+        path = "collections/collection" .. collectionNumber,
+        minigames = {},
+    }
+    
+    -- Load all minigames in the collection dynamically
+    local files = pd.file.listFiles(gameState.currentCollection.path)
+    
+    for _, filename in ipairs(files) do
+        if filename:match("%.lua$") then
+            local modulePath = gameState.currentCollection.path .. "/" .. filename:gsub("%.lua$", "")
+            local minigameModule = require(modulePath)
+            if minigameModule then
+                table.insert(gameState.currentCollection.minigames, minigameModule)
+            end
+        end
+    end
+    
+    selectRandomMinigame()
+end
+
+function selectRandomMinigame()
+    local randomIndex = math.random(#gameState.currentCollection.minigames)
+    gameState.currentMinigame = gameState.currentCollection.minigames[randomIndex]
+    gameState.currentMinigame.init()
+    gameState.is_win = nil
+end
+
+
 --- This update method is called once per frame.
 function playdate.update()
-    -- Example code. Draw a full-screen rectangle and the frames per second
-    gfx.fillRect(0, 0, 400, 240)
-    playdate.drawFPS(0,0)
 
-    -- Update and draw all sprites. Calling this method in playdate.update
-    -- is generally what you want, if you're using sprites.
-    -- See https://sdk.play.date/1.9.3/#f-graphics.sprite.update for more info
-    gfx.sprite.update()
+    updates += 1
 
-    -- Update all timers once per frame. This is required if you're using
-    -- timers in your game.
-    -- See https://sdk.play.date/1.9.3/#f-timer.updateTimers for more info
-    playdate.timer.updateTimers()
+    if ButtonState.up then y -= 2 end
+    if ButtonState.down then y += 2 end
+    if ButtonState.left then x -= 2 end
+    if ButtonState.right then x += 2 end
+
+    playdate.graphics.clear()
+
+    playdate.graphics.clear()
+    playdate.graphics.drawText("Hello, Playdate!", x, y)
+    playdate.graphics.drawText("Updates: " .. updates, 40, 60)
+
 end
