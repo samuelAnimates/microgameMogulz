@@ -18,7 +18,7 @@ import "simulator"
 Here we
 ]]
 
--- Define starting game state, which we check/update at each frame
+-- Define default values of game state, to be updated each frame
 GameState = {
     
    -- Where the player currently is, declared at title screen at first
@@ -48,21 +48,24 @@ GameState = {
     
 }
 
+-- Load save
+local loadedData = playdate.datastore.read("myGameSave")
+if loadedData then
+    -- Use loadedData.playerX, loadedData.score, etc.
+    print("Loaded device storage!")
+else
+    -- Handle first-time load or missing save
+    print("Checked device storage!")
+end
+
+
+
 AccessibilitySettings = {
     crankControls = true,
     accelerometerControls = true,
     slowMode = false
 }
 
-
--- Load save
-local loadedData = playdate.datastore.read("myGameSave")
-if loadedData then
-    -- Use loadedData.playerX, loadedData.score, etc.
-else
-    -- Handle first-time load or missing save
-    print("Checked device storage!")
-end
 
 -- Lookup table for minigame collections
 local collections = {
@@ -116,6 +119,25 @@ local function gameDidLaunch()
     playdate.graphics.setBackgroundColor(playdate.graphics.kColorBlack)
 end
 gameDidLaunch()
+
+--[[ Section 3: Global variables
+Here we define truly global variables we should not change.
+They define the space that minigames take up on screen.
+]]
+
+-- Load internal minigame screen and timer graphic
+
+-- Width and height all minigame screens
+minigameScreenWidth = 320
+minigameScreenHeight = 192
+
+-- Square edge length defining the grid underlying all minigame visuals
+minigameGridSize = 16
+
+
+--[[ Section 4: Main game loop
+
+]]
 
 updates = 0
 x = 40
