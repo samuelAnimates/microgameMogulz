@@ -2,7 +2,25 @@
 Here we 
 ]]
 
---[[ Section 2: Code Imports
+
+
+--[[ Section 2: Initialize important game states
+Here we
+]]
+
+-- Track which buttons are currently held
+local ButtonState = {
+    a = false,
+    b = false,
+    up = false,
+    down = false,
+    left = false,
+    right = false
+}
+
+
+
+--[[ Section 3: Import 
 Here we 
 ]]
 
@@ -12,15 +30,15 @@ import "CoreLibs/graphics"
 import "CoreLibs/sprites"
 import "CoreLibs/timer"
 
--- Import scripts from the root directory
+-- Import button.lua file with functions to track what buttons are currently pressed.
 import "button"
 import "crank"
 import "lifecycle"
+
+-- Import simulator.lua file with functions only called when the Playdate simulator is in use.
 import "simulator"
 
---[[ Section 3: Global states
-Here we
-]]
+
 
 -- Define default values of game state, to be updated each frame
 GameState = {
@@ -185,8 +203,11 @@ function selectRandomMinigame()
 end
 
 
---- This update method is called once per frame.
+-- This is our core game loop, which the Playdate OS calls once per frame, defaulted to 30 fps in this project.
 function playdate.update()
+
+    -- Pass ButtonState to the initButtonState function from button.lua
+    fun_initButtonState(ButtonState)
 
     updates += 1
 
