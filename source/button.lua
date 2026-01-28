@@ -11,71 +11,66 @@ ButtonState = {
     right = false
 }
 
---
 -- A Button
---
 function playdate.AButtonDown()
     ButtonState.a = true
-    print("A button pressed down.")
+    return(ButtonState)
 end
 
 function playdate.AButtonUp()
     ButtonState.a = false
-    print("A button released.")
+    return(ButtonState)
 end
 
---
 -- B Button
---
 function playdate.BButtonDown()
     ButtonState.b = true
-    print("B button pressed down.")
+    return(ButtonState)
 end
 
 function playdate.BButtonUp()
     ButtonState.b = false
-    print("B button released.")
+    return(ButtonState)
 end
 
---
--- D-pad buttons
---
+
+-- D-pad
 function playdate.upButtonDown()
     ButtonState.up = true
-    print("Up button pressed.")
+    return(ButtonState)
 end
 
 function playdate.upButtonUp()
     ButtonState.up = false
-    print("Up button released.")
+    return(ButtonState)
 end
 
 function playdate.downButtonDown()
     ButtonState.down = true
-    print("Down button pressed.")
+    return(ButtonState)
 end
 
 function playdate.downButtonUp()
     ButtonState.down = false
-    print("Down button released.")
+    return(ButtonState)
 end
 
 function playdate.leftButtonDown()
     ButtonState.left = true
-    print("Left button pressed.")
+    return(ButtonState)
 end
 
 function playdate.leftButtonUp()
     ButtonState.left = false
-    print("Left button released.")
+    return(ButtonState)
 end
 
 function playdate.rightButtonDown()
     ButtonState.right = true
-    print("Right button pressed.")
+    return(ButtonState)
 end
 
 function playdate.rightButtonUp()
     ButtonState.right = false
-    print("Right button released.")
+    return(ButtonState)
 end

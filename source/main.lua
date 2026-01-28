@@ -1,4 +1,8 @@
---[[ Section 1: Code Imports
+--[[ Section 1: Overview
+Here we 
+]]
+
+--[[ Section 2: Code Imports
 Here we 
 ]]
 
@@ -14,14 +18,14 @@ import "crank"
 import "lifecycle"
 import "simulator"
 
---[[ Section 2: Global states
+--[[ Section 3: Global states
 Here we
 ]]
 
 -- Define default values of game state, to be updated each frame
 GameState = {
     
-   -- Where the player currently is, declared at title screen at first
+   -- Where the player currently is, initialized to title screen
    -- One of: "title", "collection", "cutscene", "practice", "pause"
    cat_current = "collection",  
     
@@ -120,14 +124,14 @@ local function gameDidLaunch()
 end
 gameDidLaunch()
 
---[[ Section 3: Global variables
+--[[ Section 4: Global variables
 Here we define truly global variables we should not change.
 They define the space that minigames take up on screen.
 ]]
 
 -- Load internal minigame screen and timer graphic
 
--- Width and height all minigame screens
+-- Width and height of all minigame screens
 minigameScreenWidth = 320
 minigameScreenHeight = 192
 
@@ -135,7 +139,7 @@ minigameScreenHeight = 192
 minigameGridSize = 16
 
 
---[[ Section 4: Main game loop
+--[[ Section 5: Main game loop
 
 ]]
 
@@ -150,15 +154,15 @@ num_currentFrame = 0
 
 
 
-function loadCollection(collectionNumber)
+function loadCollection(collectionId)
     gameState.currentCollection = {
-        number = collectionNumber,
-        path = "collections/collection" .. collectionNumber,
+        id = collectionId,
+        path = "collections/" .. collectionId,
         minigames = {},
     }
     
     -- Load all minigames in the collection dynamically
-    local files = pd.file.listFiles(gameState.currentCollection.path)
+    local files = playdate.file.listFiles(gameState.currentCollection.path)
     
     for _, filename in ipairs(files) do
         if filename:match("%.lua$") then
