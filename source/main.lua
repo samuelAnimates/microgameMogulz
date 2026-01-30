@@ -2,7 +2,14 @@
 Here we 
 ]]
 
+--[[ Section 2: Core Imports
+]]
 
+-- Common CoreLibs imports.
+import "CoreLibs/object"
+import "CoreLibs/graphics"
+import "CoreLibs/sprites"
+import "CoreLibs/timer"
 
 --[[ Section 2: Initialize important game states
 Here we
@@ -18,17 +25,24 @@ local ButtonState = {
     right = false
 }
 
+--[[ Section 3: Declare handy variables
+Here we
+]]
+-- Define width and height of all minigame screens, in pixels.
+-- This leaves room for a countdown on the left edge of the screen and a faux console frame around all minigames
+local minigameScreenWidth = 320
+local minigameScreenHeight = 192
+
+-- Define, square edge length defining the grid underlying all minigame visuals, in pixels.
+-- I.e all minigames take place on a 20 by 12 grid, where each square is 16 by 16 pixels
+local minigameGridSize = 16
+
+gfx = playdate.graphics
 
 
---[[ Section 3: Import 
+--[[ Section 4: Import 
 Here we 
 ]]
-
--- Common CoreLibs imports.
-import "CoreLibs/object"
-import "CoreLibs/graphics"
-import "CoreLibs/sprites"
-import "CoreLibs/timer"
 
 -- Import button.lua file with functions to track what buttons are currently pressed.
 import "button"
@@ -39,22 +53,18 @@ import "lifecycle"
 import "simulator"
 
 
-
+--[[
 -- Define default values of game state, to be updated each frame
 GameState = {
-    
    -- Where the player currently is, initialized to title screen
    -- One of: "title", "collection", "cutscene", "practice", "pause"
-   cat_current = "collection",  
-    
+   cat_current = "collection",
    -- Which collection the player is on (nil if not in a collection)
    -- "01_music", "02_sports", "03_fashion", "04_toys", "05_retro", "06_tech"
-   cat_collection = "collection_05_retro",  
-    
+   cat_collection = "collection_05_retro",
    -- Which microgame the player is playing
    -- Numerical id (nil if not in a game)
    num_microgameId = 070,
-
    -- Which level in a collection or practice the player is on (nil if not in either)
    num_level = 1,
 
@@ -69,17 +79,6 @@ GameState = {
    }
     
 }
-
--- Load save
-local loadedData = playdate.datastore.read("myGameSave")
-if loadedData then
-    -- Use loadedData.playerX, loadedData.score, etc.
-    print("Loaded device storage!")
-else
-    -- Handle first-time load or missing save
-    print("Checked device storage!")
-end
-
 
 
 AccessibilitySettings = {
@@ -132,39 +131,23 @@ PauseMenuOptions = {
         "Back"
     }
 }
-
-local function gameDidLaunch()
-    print(playdate.metadata.name .. " launched!")
+]]
 
 
-
-    playdate.graphics.setBackgroundColor(playdate.graphics.kColorBlack)
-end
-gameDidLaunch()
+print(playdate.metadata.name .. " launched!")
 
 --[[ Section 4: Global variables
 Here we define truly global variables we should not change.
 They define the space that minigames take up on screen.
 ]]
 
--- Load internal minigame screen and timer graphic
-
--- Width and height of all minigame screens
-minigameScreenWidth = 320
-minigameScreenHeight = 192
-
--- Square edge length defining the grid underlying all minigame visuals
-minigameGridSize = 16
 
 
 --[[ Section 5: Main game loop
 
 ]]
 
-updates = 0
-x = 40
-y = 40
-playdate.graphics.setBackgroundColor(playdate.graphics.kColorWhite)
+gfx.setBackgroundColor(gfx.kColorWhite)
 
 -- Num variable to track which frame in a microgame we're on.
 -- Set to 0 outside of a micrograme. Max value will ge 240
@@ -203,23 +186,15 @@ function selectRandomMinigame()
 end
 
 
+import "collections/05_retro/minigame_065_snake"
+
 -- This is our core game loop, which the Playdate OS calls once per frame, defaulted to 30 fps in this project.
 function playdate.update()
 
     -- Pass ButtonState to the initButtonState function from button.lua
     fun_initButtonState(ButtonState)
 
-    updates += 1
-
-    if ButtonState.up then y -= 2 end
-    if ButtonState.down then y += 2 end
-    if ButtonState.left then x -= 2 end
-    if ButtonState.right then x += 2 end
-
-    playdate.graphics.clear()
-
-    playdate.graphics.clear()
-    playdate.graphics.drawText("Hello, Playdate!", x, y)
-    playdate.graphics.drawText("Updates: " .. updates, 40, 60)
+    -- Snake Game function hard-coded
+    fun_snakeUpdate(ButtonState)
 
 end

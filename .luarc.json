@@ -1,0 +1,12 @@
+{
+    "diagnostics": {
+        "globals": [
+            "playdate",
+            "import",
+            "game"
+        ]
+    },
+    "runtime": {
+        "version": "Lua 5.4"
+    }
+}
