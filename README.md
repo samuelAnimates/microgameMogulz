@@ -8,7 +8,7 @@ Unless otherwise noted below, [Samuel R. Mendez](https://samuelanimates.com) mad
 
 Code:
 - Samuel used the Github repo "[Playlate](https://github.com/bedinotti/playlate)" by Vanessa Bedinotti to structure this project.
-- Samuel used the code from Brett Chalupa's "[Make Games for Playdate with Lua](https://leanpub.com/playdatebook))" to create the snake game and Pong-like game in this collection.
+- Samuel used the code from Brett Chalupa's "[Make Games for Playdate with Lua](https://leanpub.com/playdatebook)" to create the snake game and Pong-like game in this collection.
 
 ## License
 
